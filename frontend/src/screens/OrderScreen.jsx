@@ -48,6 +48,47 @@ const OrderScreen = () => {
     }
   }, [paypal, order, errorPayPal, isLoadingPayPal, paypalDispatch]);
 
+  function onApprove(data, action) {
+    return action.order.capture().then(async function (details) {
+      try {
+        await payOrder({ orderId: orderID, details });
+        toast.success('Payment successful');
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.message);
+      }
+    });
+  }
+
+  async function onApproveTest() {
+    await payOrder({
+      orderId: orderID,
+      details: { payer: { email_address: userInfo.email } },
+    });
+    toast.success('Payment successful');
+    refetch();
+  }
+
+  function createOrder(data, action) {
+    return action.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: order.totalPrice,
+            },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  }
+
+  function onError(err) {
+    toast.error(err.message);
+  }
+
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -158,6 +199,30 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {isLoadingPay && <Loader />}
+                  {isPending ? (
+                    <Loader />
+                  ) : (
+                    <div>
+                      {/* <Button
+                        onClick={onApproveTest}
+                        style={{ marginBottom: '10px' }}
+                      >
+                        Test Pay Order
+                      </Button> */}
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
