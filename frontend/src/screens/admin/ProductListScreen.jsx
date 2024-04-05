@@ -1,16 +1,16 @@
 import React from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
-import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { toast } from 'react-toastify';
 import {
   useGetProductsQuery,
   useCreateProductMutation,
-} from '../../slices/productApiSlice';
+} from '../../slices/productsApiSlice';
 
-const ProducrtListScreen = () => {
+const ProductListScreen = () => {
   const { data: products, isLoading, error, refetch } = useGetProductsQuery();
 
   const [createProduct, { isLoading: loadingCreate }] =
@@ -61,6 +61,7 @@ const ProducrtListScreen = () => {
                 <th>PRICE</th>
                 <th>CATEGORY</th>
                 <th>BRAND</th>
+                <th>COUNT IN STOCK</th>
                 <th></th>
               </tr>
             </thead>
@@ -72,6 +73,7 @@ const ProducrtListScreen = () => {
                   <td>${product.price}</td>
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
+                  <td>{product.countInStock}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product._id}/edit`}>
                       <Button variant="light" className="btn-sm mx-2">
@@ -96,4 +98,4 @@ const ProducrtListScreen = () => {
   );
 };
 
-export default ProducrtListScreen;
+export default ProductListScreen;
