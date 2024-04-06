@@ -6,7 +6,7 @@ import { useState } from 'react';
 const SearchBox = () => {
   const { keyword: urlKeyword } = useParams();
   const navigate = useNavigate();
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState(urlKeyword || '');
 
   const submitHandler = (e) => {
     e.preventDefault();
