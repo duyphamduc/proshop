@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
+import Meta from '../components/Meta';
 import { Link } from 'react-router-dom';
 import { useGetProductsQuery } from '../slices/productsApiSlice';
 import ProductCarousel from '../components/ProductCarousel';
@@ -32,6 +33,7 @@ const HomeScreen = () => {
         </Message>
       ) : (
         <>
+          <Meta title="Welcome To ProShop" />
           <h1>Latest Products</h1>
           <Row>
             {data.products.map((product) => (
